@@ -41,7 +41,7 @@ pub fn get_pronostics<'a>(player_list: Vec<Player>) -> Pronostics {
     let mut pronostics: Pronostics =
         player_list
             .into_iter()
-            .fold(Pronostics::default(), |pronostics, other| -> Pronostics {
+            .fold(Pronostics::default(), |mut pronostics, other| -> Pronostics {
                 if pronostics
                     .possible_champions
                     .iter()
