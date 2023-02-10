@@ -1,5 +1,5 @@
-use std::collections::HashSet;
 use crate::helpers::is_stronger;
+use std::collections::HashSet;
 
 #[derive(Debug)]
 pub struct Pronostics {
@@ -39,54 +39,51 @@ mod helpers {
 }
 
 pub fn get_pronostics<'a>(player_list: Vec<Player>) -> Pronostics {
-
-
     let mut pronostics = Pronostics::default();
 
     for player in player_list {
-        if pronostics.possible_champions.iter().any(|possible_champion| !helpers::is_stronger
-            (possible_champion, &other)) {
-                pronostics.champion = other;
-                pronostics.possible_champions = Vec::<Player>::new();
-                return pronostics;
-            }
-                    if !helpers::are_equal_players(&pronostics.champion, &other) {
-                        pronostics.possible_champions.push(pronostics.champion);
-                        pronostics.possible_champions.push(other);
-                        // pronostics.possible_champions : Vec<ChessPlayer> = BTreeSet::from(pronostics
-                        //     .possible_champions)
-                        //     .into_iter().collect()
-                        //----------
-                        // pronostics.possible_champions = pronostics.possible_champions.iter().unique();
-                        //-----------------
-                        // pronostics.possible_champions = pronostics.possible_champions.sort().dedup();
-                        //-----------
-                        pronostics.possible_champions = Vec::from_iter::<HashSet<Player>>(
-                            HashSet::from_iter(pronostics.possible_champions),
-                        );
+        if pronostics
+            .possible_champions
+            .iter()
+            .any(|possible_champion| !helpers::is_stronger(possible_champion, &player))
+        {
+            pronostics.champion = player;
+            pronostics.possible_champions = Vec::<Player>::new();
+            continue;
+        }
+        if !helpers::are_equal_players(&pronostics.champion, &player) {
+            pronostics.possible_champions.push(pronostics.champion);
+            pronostics.possible_champions.push(player);
+            // pronostics.possible_champions : Vec<ChessPlayer> = BTreeSet::from(pronostics
+            //     .possible_champions)
+            //     .into_iter().collect()
+            //----------
+            // pronostics.possible_champions = pronostics.possible_champions.iter().unique();
+            //-----------------
+            // pronostics.possible_champions = pronostics.possible_champions.sort().dedup();
+            //-----------
+            pronostics.possible_champions = Vec::from_iter::<HashSet<Player>>(HashSet::from_iter(
+                pronostics.possible_champions,
+            ));
 
-                        continue;
-                    };
+            continue;
+        };
 
-                    if !helpers::is_stronger(&pronostics.champion, &other)
-                        && !helpers::is_younger(&pronostics.champion, &other)
-                    {
-                        pronostics.champion = other;
-                        continue;
-                    }
+        if !helpers::is_stronger(&pronostics.champion, &player)
+            && !helpers::is_younger(&pronostics.champion, &player)
+        {
+            pronostics.champion = player;
+            continue;
+        }
 
-                    if !is_stronger(&pronostics.champion, &other){
-                        pronostics.champion = other;
-                        continue;
-                    }
-
-
+        if !is_stronger(&pronostics.champion, &player) {
+            pronostics.champion = player;
+            continue;
+        }
     }
 
     return pronostics;
-
-
-}
+} // end of get_pronostics
 
 #[cfg(test)]
 mod tests {
