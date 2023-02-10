@@ -38,14 +38,14 @@ mod helpers {
 }
 
 pub fn get_pronostics<'a>(player_list: Vec<Player>) -> Pronostics {
-    let pronostics: Pronostics =
+    let mut pronostics: Pronostics =
         player_list
             .into_iter()
             .fold(Pronostics::default(), |pronostics, other| -> Pronostics {
                 if pronostics
                     .possible_champions
                     .iter()
-                    .any(|possible_champion| !helpers::is_stronger(&pronostics.champion, &other))
+                    .any(|possible_champion| !helpers::is_stronger(possible_champion, &other))
                 {
                     pronostics.champion = other;
                     pronostics.possible_champions = Vec::<Player>::new();
