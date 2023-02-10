@@ -1,16 +1,16 @@
 use std::collections::HashSet;
 
 #[derive(Debug)]
-pub struct Pronostics<'a> {
-    pub champion: &'a Player,
-    pub possible_champions: Vec<&'a Player>,
+pub struct Pronostics {
+    pub champion: Player,
+    pub possible_champions: Vec<Player>,
 }
 
-impl<'a> Default for Pronostics<'a> {
+impl Default for Pronostics {
     fn default() -> Self {
         return Self {
-            champion: &Player::default(),
-            possible_champions: Vec::<&Player>::new(),
+            champion: Player::default(),
+            possible_champions: Vec::<Player>::new(),
         };
     }
 }
@@ -37,7 +37,7 @@ mod helpers {
     }
 }
 
-pub fn get_pronostics<'a>(player_list: Vec<Player>) -> Pronostics<'a> {
+pub fn get_pronostics<'a>(player_list: Vec<Player>) -> Pronostics {
     let pronostics: Pronostics =
         player_list
             .into_iter()
@@ -47,19 +47,19 @@ pub fn get_pronostics<'a>(player_list: Vec<Player>) -> Pronostics<'a> {
                     .iter()
                     .any(|possible_champion| !helpers::is_stronger(&pronostics.champion, &other))
                 {
-                    pronostics.champion = &other;
-                    pronostics.possible_champions = Vec::<&Player>::new();
+                    pronostics.champion = other;
+                    pronostics.possible_champions = Vec::<Player>::new();
                 }
 
                 if !helpers::is_stronger(&pronostics.champion, &other)
                     && !helpers::is_younger(&pronostics.champion, &other)
                 {
-                    pronostics.champion = &other;
+                    pronostics.champion = other;
                 }
 
                 if !helpers::are_equal_players(&pronostics.champion, &other) {
-                    pronostics.possible_champions.push(&pronostics.champion);
-                    pronostics.possible_champions.push(&other);
+                    pronostics.possible_champions.push(pronostics.champion);
+                    pronostics.possible_champions.push(other);
                     // pronostics.possible_champions : Vec<ChessPlayer> = BTreeSet::from(pronostics
                     //     .possible_champions)
                     //     .into_iter().collect()
@@ -68,7 +68,7 @@ pub fn get_pronostics<'a>(player_list: Vec<Player>) -> Pronostics<'a> {
                     //-----------------
                     // pronostics.possible_champions = pronostics.possible_champions.sort().dedup();
                     //-----------
-                    pronostics.possible_champions = Vec::from_iter::<HashSet<&Player, _>>(
+                    pronostics.possible_champions = Vec::from_iter::<HashSet<Player>>(
                         HashSet::from_iter(pronostics.possible_champions),
                     );
                 };
