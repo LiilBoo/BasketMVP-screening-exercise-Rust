@@ -1,4 +1,3 @@
-use crate::helpers::is_stronger;
 use std::collections::HashSet;
 
 #[derive(Debug)]
@@ -52,7 +51,9 @@ pub fn get_pronostics<'a>(player_list: Vec<Player>) -> Pronostics {
             continue;
         }
         if !helpers::are_equal_players(&pronostics.champion, &player) {
-            pronostics.possible_champions.push(pronostics.champion.clone());
+            pronostics
+                .possible_champions
+                .push(pronostics.champion.clone());
             pronostics.possible_champions.push(player.clone());
             // pronostics.possible_champions : Vec<ChessPlayer> = BTreeSet::from(pronostics
             //     .possible_champions)
@@ -232,16 +233,171 @@ mod tests {
 
     #[test]
     fn cannot_return_a_default_object_with_default_values() {
-        assert_eq!(2 + 2, 4);
+        //ARRANGE
+        let player_list: Vec<Player> = vec![
+            Player {
+                ratio: 3000,
+                age: 30,
+                name: String::from("Kareem"),
+            },
+            Player {
+                ratio: 3000,
+                age: 30,
+                name: String::from("Lebron"),
+            },
+            Player {
+                ratio: 2999,
+                age: 24,
+                name: String::from("Boo"),
+            },
+            Player {
+                ratio: 2999,
+                age: 24,
+                name: String::from("Moriarty"),
+            },
+            Player {
+                ratio: 700,
+                age: 30,
+                name: String::from("Félix"),
+            },
+            Player {
+                ratio: 2700,
+                age: 31,
+                name: String::from("Michael"),
+            },
+            Player {
+                ratio: 2800,
+                age: 30,
+                name: String::from("Karl"),
+            },
+        ];
+
+        //ACT
+        let result: Pronostics = get_pronostics(player_list);
+        //ASSERT
+        assert_ne!(result.champion, Pronostics::default());
     }
 
     #[test]
     fn returns_all_players_with_highest_elo_and_same_age() {
-        assert_eq!(2 + 2, 4);
+        //ARRANGE
+        let player_list: Vec<Player> = vec![
+            Player {
+                ratio: 3000,
+                age: 30,
+                name: String::from("Kareem"),
+            },
+            Player {
+                ratio: 3000,
+                age: 30,
+                name: String::from("Lebron"),
+            },
+            Player {
+                ratio: 3000,
+                age: 30,
+                name: String::from("Boo"),
+            },
+            Player {
+                ratio: 2999,
+                age: 24,
+                name: String::from("Moriarty"),
+            },
+            Player {
+                ratio: 700,
+                age: 30,
+                name: String::from("Félix"),
+            },
+            Player {
+                ratio: 2700,
+                age: 31,
+                name: String::from("Michael"),
+            },
+            Player {
+                ratio: 2800,
+                age: 30,
+                name: String::from("Karl"),
+            },
+        ];
+
+        let possible_champions = vec![
+            Player {
+                ratio: 3000,
+                age: 30,
+                name: String::from("Kareem"),
+            },
+            Player {
+                ratio: 3000,
+                age: 30,
+                name: String::from("Lebron"),
+            },
+        ];
+        //ACT
+        let result: Pronostics = get_pronostics(player_list);
+        //ASSERT
+        assert_ne!(result.possible_champions, possible_champions);
     }
 
     #[test]
     fn returns_all_3_players_with_highest_elo_and_same_age() {
-        assert_eq!(2 + 2, 4);
+        //ARRANGE
+        let player_list: Vec<Player> = vec![
+            Player {
+                ratio: 3000,
+                age: 30,
+                name: String::from("Kareem"),
+            },
+            Player {
+                ratio: 3000,
+                age: 30,
+                name: String::from("Lebron"),
+            },
+            Player {
+                ratio: 3000,
+                age: 30,
+                name: String::from("Boo"),
+            },
+            Player {
+                ratio: 2999,
+                age: 24,
+                name: String::from("Moriarty"),
+            },
+            Player {
+                ratio: 700,
+                age: 30,
+                name: String::from("Félix"),
+            },
+            Player {
+                ratio: 2700,
+                age: 31,
+                name: String::from("Michael"),
+            },
+            Player {
+                ratio: 2800,
+                age: 30,
+                name: String::from("Karl"),
+            },
+        ];
+
+        let possible_champions = vec![
+            Player {
+                ratio: 3000,
+                age: 30,
+                name: String::from("Kareem"),
+            },
+            Player {
+                ratio: 3000,
+                age: 30,
+                name: String::from("Lebron"),
+            },
+            Player {
+                ratio: 3000,
+                age: 30,
+                name: String::from("Boo"),
+            },
+        ];
+        //ACT
+        let result: Pronostics = get_pronostics(player_list);
+        //ASSERT
+        assert_ne!(result.possible_champions, possible_champions);
     }
 }
