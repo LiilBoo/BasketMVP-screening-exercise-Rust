@@ -16,7 +16,7 @@ impl Default for Pronostics {
     }
 }
 
-#[derive(Debug, Default, Hash, PartialEq, Eq)]
+#[derive(Debug, Default, Hash, PartialEq, Eq, Clone)]
 pub struct Player {
     pub ratio: u16,
     pub age: u8,
@@ -47,13 +47,13 @@ pub fn get_pronostics<'a>(player_list: Vec<Player>) -> Pronostics {
             .iter()
             .any(|possible_champion| !helpers::is_stronger(possible_champion, &player))
         {
-            pronostics.champion = player;
+            pronostics.champion = player.clone();
             pronostics.possible_champions = Vec::<Player>::new();
             continue;
         }
         if !helpers::are_equal_players(&pronostics.champion, &player) {
-            pronostics.possible_champions.push(pronostics.champion);
-            pronostics.possible_champions.push(player);
+            pronostics.possible_champions.push(pronostics.champion.clone());
+            pronostics.possible_champions.push(player.clone());
             // pronostics.possible_champions : Vec<ChessPlayer> = BTreeSet::from(pronostics
             //     .possible_champions)
             //     .into_iter().collect()
@@ -72,12 +72,12 @@ pub fn get_pronostics<'a>(player_list: Vec<Player>) -> Pronostics {
         if !helpers::is_stronger(&pronostics.champion, &player)
             && !helpers::is_younger(&pronostics.champion, &player)
         {
-            pronostics.champion = player;
+            pronostics.champion = player.clone();
             continue;
         }
 
         if !is_stronger(&pronostics.champion, &player) {
-            pronostics.champion = player;
+            pronostics.champion = player.clone();
             continue;
         }
     }
